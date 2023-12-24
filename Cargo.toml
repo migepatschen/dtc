@@ -1,0 +1,5 @@
+# https://kryptografie.de/kryptografie/chiffre/doppelter-spaltentausch.htm
+
+[workspace]
+resolver = "2"
+members = ["dtc-logic"]

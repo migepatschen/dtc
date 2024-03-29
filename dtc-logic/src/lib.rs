@@ -1,9 +1,15 @@
+use column::Column;
 use itertools::Itertools;
 
+mod column;
+
 pub fn encode(key_1: &str, key_2: &str, text: &str) -> String {
+    let prepared_key_1 = prepare_input(key_1);
+    let prepared_key_2 = prepare_input(key_2);
     let prepared_text = prepare_input(text);
-    let transposed_text = transpose(key_1, &prepared_text);
-    return transposed_text;
+    let mut transposed_text = transpose(&prepared_key_1, &prepared_text);
+    transposed_text = transpose(&prepared_key_2, &transposed_text);
+    transposed_text
 }
 
 fn transpose(key: &str, text: &str) -> String {
@@ -16,7 +22,12 @@ fn transpose(key: &str, text: &str) -> String {
         }
     }
 
-    text.to_owned()
+    let mut transposed_text = String::new();
+    for col in columns.iter().sorted() {
+        transposed_text.push_str(col.value());
+    }
+
+    transposed_text
 }
 
 fn prepare_input(input: &str) -> String {
@@ -31,47 +42,43 @@ fn prepare_input(input: &str) -> String {
     text
 }
 
-#[derive(Debug, Clone)]
-struct Column {
-    letter: char,
-    index: usize,
-    value: String,
-}
-
-impl Column {
-    fn from_str(key: &str) -> Vec<Self> {
-        let sorted_key: String = key.chars().sorted().collect();
-        let mut columns: Vec<Self> = Vec::with_capacity(key.len());
-        for c in key.chars() {
-            let index = sorted_key.find(c).expect("the letter should be in the key");
-            columns.push(Column {
-                letter: c,
-                index,
-                value: String::new(),
-            });
-        }
-        columns
-    }
-
-    fn add(&mut self, c: char) {
-        self.value.push(c);
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
+    use pretty_assertions::assert_eq;
+    use rstest::*;
 
-    #[test]
-    fn test1() {
-        let encoded_text = encode("Apfel", "Kirsche", "Beispielklartext");
-        assert_eq!("SLEEKXILRBIEATTP".to_owned(), encoded_text);
+    #[rstest]
+    #[case("Apfel", "Kirsche", "Beispielklartext", "SLEEKXILRBIEATTP")]
+    #[case("Hans", "Dampf", "Hallo Welt!", "WEALTHLOL")]
+    #[case(
+        "Lorem",
+        "ipsum",
+        "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam",
+        "EEMETMIIGLSOESNRIOPSSUALSDNDTRTEOCIUMTOEICSALDIMDPRRTA"
+    )]
+    fn encoding(
+        #[case] key1: &str,
+        #[case] key2: &str,
+        #[case] input: &str,
+        #[case] expected: &str,
+    ) {
+        let encoded_text = encode(key1, key2, input);
+        assert_eq!(expected.to_owned(), encoded_text);
     }
 
-    #[test]
+    #[rstest]
     fn preparation() {
         let prepared_input = prepare_input("input text with ä,ß.ö-ü;Ü:Ä#Ö áñ");
         //let prepared_input = prepare_input("h ä,ß.ö-ü;Ü:Ä#Ö ");
         assert_eq!("INPUTTEXTWITHÄSSÖÜÜÄÖÁÑ".to_owned(), prepared_input);
+    }
+
+    #[rstest]
+    #[case("APFEL", "AEFLP")]
+    #[case("KIRSCHE", "CEHIKRS")]
+    fn key_sorting(#[case] key: &str, #[case] expected: &str) {
+        let sorted_key: String = key.chars().sorted().collect();
+        assert_eq!(expected.to_owned(), sorted_key);
     }
 }

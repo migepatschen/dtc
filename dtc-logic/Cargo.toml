@@ -5,8 +5,9 @@ edition = "2021"
 
 
 [dependencies]
-itertools = "0.12"
+itertools = "0.13"
+unicode-segmentation = "1.11"
 
 [dev-dependencies]
 pretty_assertions = "1.4"
-rstest = "0.18"
+rstest = "0.21"

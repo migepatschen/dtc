@@ -1,4 +1,5 @@
 # https://kryptografie.de/kryptografie/chiffre/doppelter-spaltentausch.htm
+# https://infsec.de/doppelwuerfel/Doppelwuerfel_Tim_Wambach_final.pdf
 
 [workspace]
 resolver = "2"

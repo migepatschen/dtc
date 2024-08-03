@@ -4,6 +4,7 @@ use itertools::Itertools;
 pub struct Column {
     letter: char,
     index: usize,
+    original_index: usize,
     value: String,
 }
 
@@ -11,11 +12,14 @@ impl Column {
     pub fn from_str(key: &str) -> Vec<Self> {
         let sorted_key: String = key.chars().sorted().collect();
         let mut columns: Vec<Self> = Vec::with_capacity(key.len());
-        for c in key.chars() {
+
+        for (original_index, c) in key.chars().enumerate() {
             let index = sorted_key.find(c).expect("the letter should be in the key");
+
             columns.push(Column {
                 letter: c,
                 index,
+                original_index,
                 value: String::new(),
             });
         }
@@ -26,12 +30,20 @@ impl Column {
         self.value.push(c);
     }
 
+    pub fn add_str(&mut self, s: &str) {
+        self.value.push_str(s);
+    }
+
     pub fn letter(&self) -> &char {
         &self.letter
     }
 
     pub fn index(&self) -> &usize {
         &self.index
+    }
+
+    pub fn original_index(&self) -> &usize {
+        &self.original_index
     }
 
     pub fn value(&self) -> &str {
@@ -58,3 +70,23 @@ impl PartialEq for Column {
 }
 
 impl Eq for Column {}
+
+pub trait DtcColumnSort {
+    fn sort_by_index(&mut self);
+    fn sort_by_original_index(&mut self);
+    fn sort_by_letter(&mut self);
+}
+
+impl DtcColumnSort for Vec<Column> {
+    fn sort_by_index(&mut self) {
+        self.sort_by(|a, b| a.index.cmp(&b.index))
+    }
+
+    fn sort_by_original_index(&mut self) {
+        self.sort_by(|a, b| a.original_index.cmp(&b.original_index))
+    }
+
+    fn sort_by_letter(&mut self) {
+        self.sort_by(|a, b| a.letter.cmp(&b.letter))
+    }
+}

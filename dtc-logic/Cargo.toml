@@ -10,4 +10,4 @@ unicode-segmentation = "1.11"
 
 [dev-dependencies]
 pretty_assertions = "1.4"
-rstest = "0.21"
+rstest = "0.22"

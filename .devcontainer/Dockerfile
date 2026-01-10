@@ -37,8 +37,8 @@ WORKDIR /home/$USERNAME
 # setup git
 RUN git config --global push.autoSetupRemote true
 RUN git config --global init.defaultBranch main
-RUN git config user.name "migepatschen"
-RUN git config user.email "13597235+migepatschen@users.noreply.github.com"
+RUN git config --global user.name "migepatschen"
+RUN git config --global user.email "13597235+migepatschen@users.noreply.github.com"
 
 # expose ports as needed
 # EXPOSE 8000 8001 8002 8003

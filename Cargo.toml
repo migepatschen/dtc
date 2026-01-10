@@ -3,10 +3,12 @@
 
 [workspace]
 resolver = "3"
-members = ["dtc-logic"]
+members = ["dtc-logic", "dtc-tui"]
 
 [workspace.dependencies]
 itertools = "0.14"
 unicode-segmentation = "1.12"
 pretty_assertions = "1.4"
 rstest = "0.26"
+ratatui = "0.30.0"
+crossterm = "0.29.0"

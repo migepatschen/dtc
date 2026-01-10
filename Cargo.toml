@@ -2,5 +2,11 @@
 # https://infsec.de/doppelwuerfel/Doppelwuerfel_Tim_Wambach_final.pdf
 
 [workspace]
-resolver = "2"
+resolver = "3"
 members = ["dtc-logic"]
+
+[workspace.dependencies]
+itertools = "0.14"
+unicode-segmentation = "1.12"
+pretty_assertions = "1.4"
+rstest = "0.26"

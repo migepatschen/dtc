@@ -12,3 +12,9 @@ pretty_assertions = "1.4"
 rstest = "0.26"
 ratatui = "0.30.0"
 crossterm = "0.29.0"
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "s"
+strip = true

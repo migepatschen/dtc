@@ -7,7 +7,7 @@ members = ["dtc-logic", "dtc-tui"]
 
 [workspace.dependencies]
 itertools = "0.14"
-unicode-segmentation = "1.12"
+unicode-segmentation = "1.13"
 pretty_assertions = "1.4"
 rstest = "0.26"
 ratatui = "0.30.0"
